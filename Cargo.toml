@@ -4,7 +4,6 @@ version = "0.1.0"
 authors = ["toku-sa-n <tokusan441@gmail.com>"]
 edition = "2018"
 license = "MPL-2.0"
-license-file = "LICENSE"
 description = "A library which provides unit types for writing OS."
 repository = "https://github.com/toku-sa-n/os_units"
 categories = ["no-std", "os"]
