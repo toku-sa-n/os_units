@@ -1,5 +1,9 @@
 # os_units
 
+[![Crates.io](https://img.shields.io/crates/v/os_units)](https://crates.io/crates/os_units)
+[![docs.rs](https://docs.rs/os_units/badge.svg)](https://docs.rs/os_units)
+[![Rust](https://github.com/toku-sa-n/os_units/workflows/Rust/badge.svg)](https://github.com/toku-sa-n/os_units/actions)
+
 This crate provides a data structure for byte size. With
 [`x86_64`](https://github.com/rust-osdev/x86_64) crate, you can easily convert
 the size of physical memory pages into bytes, and bytes into the number of physical memory
