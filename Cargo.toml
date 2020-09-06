@@ -3,7 +3,14 @@ name = "os_units"
 version = "0.1.0"
 authors = ["toku-sa-n <tokusan441@gmail.com>"]
 edition = "2018"
+license = "MPL-2.0"
+license-file = "LICENSE"
+description = "A library which provides unit types for writing OS."
+repository = "https://github.com/toku-sa-n/os_units"
+categories = ["no-std", "os"]
+keywords = ["no_std", "os"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+x86_64 = "0.11.4"
