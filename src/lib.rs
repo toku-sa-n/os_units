@@ -27,6 +27,8 @@
 #![feature(const_fn)]
 
 use core::marker::PhantomData;
+use core::ops::Add;
+use core::ops::Sub;
 use x86_64::structures::paging::PageSize;
 
 /// A marker trait for representing units.
@@ -88,6 +90,38 @@ impl<T: PageSize> Size<NumOfPages<T>> {
     }
 }
 
+impl Add<Size<Bytes>> for Size<Bytes> {
+    type Output = Size<Bytes>;
+
+    fn add(self, rhs: Size<Bytes>) -> Self {
+        Self::new(self.val + rhs.val)
+    }
+}
+
+impl<T: PageSize> Add<Size<NumOfPages<T>>> for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+
+    fn add(self, rhs: Size<NumOfPages<T>>) -> Self {
+        Self::new(self.val + rhs.val)
+    }
+}
+
+impl Sub<Size<Bytes>> for Size<Bytes> {
+    type Output = Size<Bytes>;
+
+    fn sub(self, rhs: Size<Bytes>) -> Self {
+        Self::new(self.val - rhs.val)
+    }
+}
+
+impl<T: PageSize> Sub<Size<NumOfPages<T>>> for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+
+    fn sub(self, rhs: Size<NumOfPages<T>>) -> Self {
+        Self::new(self.val - rhs.val)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -129,5 +163,41 @@ mod tests {
     fn pages_to_bytes_1g() {
         let num_of_pages = Size::<NumOfPages<Size1GiB>>::new(1);
         assert_eq!(num_of_pages.as_bytes().as_usize(), 0x40000000);
+    }
+
+    #[test]
+    fn addition_bytes_to_bytes() {
+        let b1 = Size::<Bytes>::new(3);
+        let b2 = Size::<Bytes>::new(1);
+        let sum = b1 + b2;
+
+        assert_eq!(sum.as_usize(), 4);
+    }
+
+    #[test]
+    fn addition_pages_to_pages() {
+        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        let p2 = Size::<NumOfPages<Size4KiB>>::new(1);
+        let sum = p1 + p2;
+
+        assert_eq!(sum.as_usize(), 4);
+    }
+
+    #[test]
+    fn subtraction_bytes_from_bytes() {
+        let b1 = Size::<Bytes>::new(3);
+        let b2 = Size::<Bytes>::new(1);
+        let diff = b1 - b2;
+
+        assert_eq!(diff.as_usize(), 2);
+    }
+
+    #[test]
+    fn subtraction_pages_from_pages() {
+        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        let p2 = Size::<NumOfPages<Size4KiB>>::new(1);
+        let diff = p1 - p2;
+
+        assert_eq!(diff.as_usize(), 2);
     }
 }
