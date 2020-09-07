@@ -27,8 +27,7 @@
 #![feature(const_fn)]
 
 use core::marker::PhantomData;
-use core::ops::Add;
-use core::ops::Sub;
+use core::ops::{Add, AddAssign, Sub, SubAssign};
 use x86_64::structures::paging::PageSize;
 
 /// A marker trait for representing units.
@@ -122,6 +121,42 @@ impl<T: PageSize> Sub<Size<NumOfPages<T>>> for Size<NumOfPages<T>> {
     }
 }
 
+impl AddAssign for Size<Bytes> {
+    fn add_assign(&mut self, rhs: Size<Bytes>) {
+        *self = Self {
+            val: self.val + rhs.val,
+            ..*self
+        }
+    }
+}
+
+impl<T: PageSize> AddAssign for Size<NumOfPages<T>> {
+    fn add_assign(&mut self, rhs: Size<NumOfPages<T>>) {
+        *self = Self {
+            val: self.val + rhs.val,
+            ..*self
+        }
+    }
+}
+
+impl SubAssign for Size<Bytes> {
+    fn sub_assign(&mut self, rhs: Size<Bytes>) {
+        *self = Self {
+            val: self.val - rhs.val,
+            ..*self
+        }
+    }
+}
+
+impl<T: PageSize> SubAssign for Size<NumOfPages<T>> {
+    fn sub_assign(&mut self, rhs: Size<NumOfPages<T>>) {
+        *self = Self {
+            val: self.val - rhs.val,
+            ..*self
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -199,5 +234,37 @@ mod tests {
         let diff = p1 - p2;
 
         assert_eq!(diff.as_usize(), 2);
+    }
+
+    #[test]
+    fn add_assign_bytes_to_bytes() {
+        let mut b1 = Size::<Bytes>::new(3);
+        b1 += Size::<Bytes>::new(1);
+
+        assert_eq!(b1.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_assign_pages_to_pages() {
+        let mut p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        p1 += Size::<NumOfPages<Size4KiB>>::new(1);
+
+        assert_eq!(p1.as_usize(), 4);
+    }
+
+    #[test]
+    fn sub_assign_bytes_to_bytes() {
+        let mut b1 = Size::<Bytes>::new(3);
+        b1 -= Size::<Bytes>::new(1);
+
+        assert_eq!(b1.as_usize(), 2);
+    }
+
+    #[test]
+    fn sub_assign_pages_to_pages() {
+        let mut p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        p1 -= Size::<NumOfPages<Size4KiB>>::new(1);
+
+        assert_eq!(p1.as_usize(), 2);
     }
 }
