@@ -1,6 +1,6 @@
 [package]
 name = "os_units"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["toku-sa-n <tokusan441@gmail.com>"]
 edition = "2018"
 license = "MPL-2.0"
@@ -12,4 +12,4 @@ keywords = ["no_std", "os"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-x86_64 = "0.11.4"
+x86_64 = "0.12.0"
