@@ -25,6 +25,7 @@
 //! ```
 #![no_std]
 #![feature(const_fn)]
+#![feature(const_fn_fn_ptr_basics)]
 
 use core::marker::PhantomData;
 use core::ops::{Add, AddAssign, Sub, SubAssign};
