@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 - 2020-10-24
+
+- Implement `Div` trait.
+
 ## 0.2.1 - 2020-10-24
 
 - Implement `MulAssign` trait.
