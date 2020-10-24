@@ -28,7 +28,7 @@
 #![feature(const_fn_fn_ptr_basics)]
 
 use core::marker::PhantomData;
-use core::ops::{Add, AddAssign, Sub, SubAssign};
+use core::ops::{Add, AddAssign, Mul, Sub, SubAssign};
 use x86_64::structures::paging::PageSize;
 
 /// A marker trait for representing units.
@@ -154,6 +154,46 @@ impl<T: PageSize> SubAssign for Size<NumOfPages<T>> {
         *self = Self {
             val: self.val - rhs.val,
             ..*self
+        }
+    }
+}
+
+impl Mul for Size<Bytes> {
+    type Output = Size<Bytes>;
+    fn mul(self, rhs: Size<Bytes>) -> Self::Output {
+        Self {
+            val: self.val * rhs.val,
+            ..self
+        }
+    }
+}
+
+impl Mul<usize> for Size<Bytes> {
+    type Output = Size<Bytes>;
+    fn mul(self, rhs: usize) -> Self::Output {
+        Self {
+            val: self.val * rhs,
+            ..self
+        }
+    }
+}
+
+impl<T: PageSize> Mul for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+    fn mul(self, rhs: Size<NumOfPages<T>>) -> Self::Output {
+        Self {
+            val: self.val * rhs.val,
+            ..self
+        }
+    }
+}
+
+impl<T: PageSize> Mul<usize> for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+    fn mul(self, rhs: usize) -> Self::Output {
+        Self {
+            val: self.val * rhs,
+            ..self
         }
     }
 }
