@@ -30,7 +30,7 @@
 use {
     core::{
         marker::PhantomData,
-        ops::{Add, AddAssign, Div, Mul, Sub, SubAssign},
+        ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign},
     },
     x86_64::structures::paging::PageSize,
 };
@@ -201,6 +201,30 @@ impl<T: PageSize> Div<usize> for NumOfPages<T> {
     }
 }
 
+impl MulAssign for Bytes {
+    fn mul_assign(&mut self, rhs: Bytes) {
+        *self = *self * rhs;
+    }
+}
+
+impl MulAssign<usize> for Bytes {
+    fn mul_assign(&mut self, rhs: usize) {
+        *self = *self * rhs;
+    }
+}
+
+impl<T: PageSize> MulAssign for NumOfPages<T> {
+    fn mul_assign(&mut self, rhs: NumOfPages<T>) {
+        *self = *self * rhs;
+    }
+}
+
+impl<T: PageSize> MulAssign<usize> for NumOfPages<T> {
+    fn mul_assign(&mut self, rhs: usize) {
+        *self = *self * rhs;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -344,6 +368,38 @@ mod tests {
         let mul = p * 4;
 
         assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_assign_bytes_by_bytes() {
+        let mut b = Bytes::new(3);
+        b *= Bytes::new(4);
+
+        assert_eq!(b.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_assign_bytes_by_usize() {
+        let mut b = Bytes::new(3);
+        b *= 4;
+
+        assert_eq!(b.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_assign_pages_by_pages() {
+        let mut p = NumOfPages::<Size4KiB>::new(3);
+        p *= NumOfPages::new(4);
+
+        assert_eq!(p.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_assign_pages_by_usize() {
+        let mut p = NumOfPages::<Size4KiB>::new(3);
+        p *= 4;
+
+        assert_eq!(p.as_usize(), 12);
     }
 
     #[test]

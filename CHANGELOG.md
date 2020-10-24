@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 - 2020-10-24
+
+- Implement `MulAssign` trait.
+
 ## 0.2.0 - 2020-10-24
 
 - Split `Size` into `Bytes` and `NumOfPages`
