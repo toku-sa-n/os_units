@@ -268,4 +268,38 @@ mod tests {
 
         assert_eq!(p1.as_usize(), 2);
     }
+
+    #[test]
+    fn mul_from_bytes_to_bytes() {
+        let b1 = Size::<Bytes>::new(3);
+        let b2 = Size::<Bytes>::new(4);
+        let mul = b1 * b2;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_from_pages_to_pages() {
+        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        let p2 = Size::<NumOfPages<Size4KiB>>::new(4);
+        let mul = p1 * p2;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_bytes_by_usize() {
+        let b = Size::<Bytes>::new(3);
+        let mul = b * 4;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_pages_by_usize() {
+        let p = Size::<NumOfPages<Size4KiB>>::new(3);
+        let mul = p * 4;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
 }
