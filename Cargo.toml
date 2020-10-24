@@ -1,6 +1,6 @@
 [package]
 name = "os_units"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["toku-sa-n <tokusan441@gmail.com>"]
 edition = "2018"
 license = "MPL-2.0"

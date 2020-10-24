@@ -28,8 +28,10 @@
 #![feature(const_fn_fn_ptr_basics)]
 
 use {
-    core::marker::PhantomData,
-    core::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign},
+    core::{
+        marker::PhantomData,
+        ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign},
+    },
     x86_64::structures::paging::PageSize,
 };
 
@@ -173,6 +175,27 @@ impl<T: PageSize> Mul<usize> for NumOfPages<T> {
     fn mul(self, rhs: usize) -> Self::Output {
         Self {
             num_of_pages: self.num_of_pages * rhs,
+            ..self
+        }
+    }
+}
+
+impl Div<usize> for Bytes {
+    type Output = Bytes;
+
+    fn div(self, rhs: usize) -> Self::Output {
+        Self {
+            bytes: self.bytes / rhs,
+        }
+    }
+}
+
+impl<T: PageSize> Div<usize> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn div(self, rhs: usize) -> Self::Output {
+        Self {
+            num_of_pages: self.num_of_pages / rhs,
             ..self
         }
     }
@@ -377,5 +400,21 @@ mod tests {
         p *= 4;
 
         assert_eq!(p.as_usize(), 12);
+    }
+
+    #[test]
+    fn div_bytes_by_usize() {
+        let b1 = Bytes::new(3);
+        let div = b1 / 2;
+
+        assert_eq!(div.as_usize(), 1);
+    }
+
+    #[test]
+    fn div_num_of_pages_by_usize() {
+        let p1 = NumOfPages::<Size4KiB>::new(3);
+        let div = p1 / 2;
+
+        assert_eq!(div.as_usize(), 1);
     }
 }
