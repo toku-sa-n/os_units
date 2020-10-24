@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 - 2020-10-24
+
+- Split `Size` into `Bytes` and `NumOfPages`
+
 ## 0.1.4 - 2020-10-24
 
 - Implement `Mul` trait.
