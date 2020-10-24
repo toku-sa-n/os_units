@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 - 2020-10-24
+
+- Implement `Mul` trait.
+
 ## 0.1.3 - 2020-09-30
 
 - Fix a build error on latest nightly.
