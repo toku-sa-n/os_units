@@ -28,7 +28,7 @@
 #![feature(const_fn_fn_ptr_basics)]
 
 use core::marker::PhantomData;
-use core::ops::{Add, AddAssign, Sub, SubAssign};
+use core::ops::{Add, AddAssign, Mul, Sub, SubAssign};
 use x86_64::structures::paging::PageSize;
 
 /// A marker trait for representing units.
@@ -158,6 +158,46 @@ impl<T: PageSize> SubAssign for Size<NumOfPages<T>> {
     }
 }
 
+impl Mul for Size<Bytes> {
+    type Output = Size<Bytes>;
+    fn mul(self, rhs: Size<Bytes>) -> Self::Output {
+        Self {
+            val: self.val * rhs.val,
+            ..self
+        }
+    }
+}
+
+impl Mul<usize> for Size<Bytes> {
+    type Output = Size<Bytes>;
+    fn mul(self, rhs: usize) -> Self::Output {
+        Self {
+            val: self.val * rhs,
+            ..self
+        }
+    }
+}
+
+impl<T: PageSize> Mul for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+    fn mul(self, rhs: Size<NumOfPages<T>>) -> Self::Output {
+        Self {
+            val: self.val * rhs.val,
+            ..self
+        }
+    }
+}
+
+impl<T: PageSize> Mul<usize> for Size<NumOfPages<T>> {
+    type Output = Size<NumOfPages<T>>;
+    fn mul(self, rhs: usize) -> Self::Output {
+        Self {
+            val: self.val * rhs,
+            ..self
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -267,5 +307,39 @@ mod tests {
         p1 -= Size::<NumOfPages<Size4KiB>>::new(1);
 
         assert_eq!(p1.as_usize(), 2);
+    }
+
+    #[test]
+    fn mul_from_bytes_to_bytes() {
+        let b1 = Size::<Bytes>::new(3);
+        let b2 = Size::<Bytes>::new(4);
+        let mul = b1 * b2;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_from_pages_to_pages() {
+        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
+        let p2 = Size::<NumOfPages<Size4KiB>>::new(4);
+        let mul = p1 * p2;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_bytes_by_usize() {
+        let b = Size::<Bytes>::new(3);
+        let mul = b * 4;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_pages_by_usize() {
+        let p = Size::<NumOfPages<Size4KiB>>::new(3);
+        let mul = p * 4;
+
+        assert_eq!(mul.as_usize(), 12);
     }
 }
