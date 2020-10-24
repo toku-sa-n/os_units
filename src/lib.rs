@@ -30,7 +30,7 @@
 use {
     core::{
         marker::PhantomData,
-        ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign},
+        ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
     },
     x86_64::structures::paging::PageSize,
 };
@@ -180,27 +180,6 @@ impl<T: PageSize> Mul<usize> for NumOfPages<T> {
     }
 }
 
-impl Div<usize> for Bytes {
-    type Output = Bytes;
-
-    fn div(self, rhs: usize) -> Self::Output {
-        Self {
-            bytes: self.bytes / rhs,
-        }
-    }
-}
-
-impl<T: PageSize> Div<usize> for NumOfPages<T> {
-    type Output = NumOfPages<T>;
-
-    fn div(self, rhs: usize) -> Self::Output {
-        Self {
-            num_of_pages: self.num_of_pages / rhs,
-            ..self
-        }
-    }
-}
-
 impl MulAssign for Bytes {
     fn mul_assign(&mut self, rhs: Bytes) {
         *self = *self * rhs;
@@ -222,6 +201,39 @@ impl<T: PageSize> MulAssign for NumOfPages<T> {
 impl<T: PageSize> MulAssign<usize> for NumOfPages<T> {
     fn mul_assign(&mut self, rhs: usize) {
         *self = *self * rhs;
+    }
+}
+
+impl Div<usize> for Bytes {
+    type Output = Bytes;
+
+    fn div(self, rhs: usize) -> Self::Output {
+        Self {
+            bytes: self.bytes / rhs,
+        }
+    }
+}
+
+impl<T: PageSize> Div<usize> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn div(self, rhs: usize) -> Self::Output {
+        Self {
+            num_of_pages: self.num_of_pages / rhs,
+            ..self
+        }
+    }
+}
+
+impl DivAssign<usize> for Bytes {
+    fn div_assign(&mut self, rhs: usize) {
+        *self = *self / rhs;
+    }
+}
+
+impl<T: PageSize> DivAssign<usize> for NumOfPages<T> {
+    fn div_assign(&mut self, rhs: usize) {
+        *self = *self / rhs;
     }
 }
 
@@ -416,5 +428,21 @@ mod tests {
         let div = p1 / 2;
 
         assert_eq!(div.as_usize(), 1);
+    }
+
+    #[test]
+    fn divassign_bytes_by_usize() {
+        let mut b = Bytes::new(3);
+        b /= 2;
+
+        assert_eq!(b.as_usize(), 1);
+    }
+
+    #[test]
+    fn divassign_num_of_pages_by_usize() {
+        let mut p = NumOfPages::<Size4KiB>::new(3);
+        p /= 2;
+
+        assert_eq!(p.as_usize(), 1);
     }
 }
