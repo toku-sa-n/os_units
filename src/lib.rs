@@ -13,10 +13,10 @@
 //! # Examples
 //!
 //! ```rust
-//! use os_units::{Size, Bytes};
+//! use os_units::Bytes;
 //! use x86_64::structures::paging::{PageSize, Size4KiB};
 //!
-//! let bytes_of_kernel = Size::<Bytes>::new(314159);
+//! let bytes_of_kernel = Bytes::new(314159);
 //! let pages_of_kernel = bytes_of_kernel.as_num_of_pages::<Size4KiB>();
 //! assert_eq!(pages_of_kernel.as_usize(), 77);
 //!
@@ -31,168 +31,146 @@ use core::marker::PhantomData;
 use core::ops::{Add, AddAssign, Mul, Sub, SubAssign};
 use x86_64::structures::paging::PageSize;
 
-/// A marker trait for representing units.
-pub trait Unit: Copy + Clone + PartialEq + Eq + PartialOrd + Ord {}
-
-/// A struct representing bytes.
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Bytes;
-impl Unit for Bytes {}
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-/// A struct representing the number of physical pages.
-pub struct NumOfPages<T: PageSize> {
-    _marker: PhantomData<fn() -> T>,
-}
-impl<T: PageSize> Unit for NumOfPages<T> {}
-
 #[repr(transparent)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 /// A struct containing the value with the unit specified by generic type.
-pub struct Size<T: Unit> {
-    val: usize,
-    _marker: PhantomData<fn() -> T>,
+pub struct Bytes {
+    bytes: usize,
+}
+impl Bytes {
+    /// Creates a new instance with given value.
+    pub const fn new(bytes: usize) -> Self {
+        Self { bytes }
+    }
+
+    /// Returns the value.
+    pub const fn as_usize(self) -> usize {
+        self.bytes
+    }
+
+    /// Converts bytes to the number of physical pages. Note that the number of physical pages will
+    /// be calculated so that the specified bytes will be fit in pages.
+    pub const fn as_num_of_pages<T: PageSize>(self) -> NumOfPages<T> {
+        NumOfPages::new((self.bytes + T::SIZE as usize - 1) / T::SIZE as usize)
+    }
 }
 
-impl<T: Unit> Size<T> {
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct NumOfPages<T: PageSize> {
+    num_of_pages: usize,
+    _marker: PhantomData<fn() -> T>,
+}
+impl<T: PageSize> NumOfPages<T> {
     /// Creates a new instance with given value.
-    pub const fn new(val: usize) -> Self {
+    pub const fn new(num_of_pages: usize) -> Self {
         Self {
-            val,
+            num_of_pages,
             _marker: PhantomData,
         }
     }
 
     /// Returns the value.
     pub const fn as_usize(self) -> usize {
-        self.val
+        self.num_of_pages
+    }
+
+    /// Converts the number of physical pages to bytes.
+    pub const fn as_bytes(self) -> Bytes {
+        Bytes::new(self.num_of_pages * T::SIZE as usize)
     }
 }
 
-impl Size<Bytes> {
-    /// Converts bytes to the number of physical pages. Note that the number of physical pages will
-    /// be calculated so that the specified bytes will be fit in pages.
-    pub const fn as_num_of_pages<T: PageSize>(self) -> Size<NumOfPages<T>> {
-        Size {
-            val: (self.val + T::SIZE as usize - 1) / T::SIZE as usize,
-            _marker: PhantomData,
-        }
+impl Add<Bytes> for Bytes {
+    type Output = Bytes;
+
+    fn add(self, rhs: Bytes) -> Self {
+        Self::new(self.bytes + rhs.bytes)
     }
 }
 
-impl<T: PageSize> Size<NumOfPages<T>> {
-    /// Convert the number of physical pages to bytes.
-    pub const fn as_bytes(self) -> Size<Bytes> {
-        Size {
-            val: self.val * T::SIZE as usize,
-            _marker: PhantomData,
-        }
+impl<T: PageSize> Add<NumOfPages<T>> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn add(self, rhs: NumOfPages<T>) -> Self {
+        Self::new(self.num_of_pages + rhs.num_of_pages)
     }
 }
 
-impl Add<Size<Bytes>> for Size<Bytes> {
-    type Output = Size<Bytes>;
+impl Sub<Bytes> for Bytes {
+    type Output = Bytes;
 
-    fn add(self, rhs: Size<Bytes>) -> Self {
-        Self::new(self.val + rhs.val)
+    fn sub(self, rhs: Bytes) -> Self {
+        Self::new(self.bytes - rhs.bytes)
     }
 }
 
-impl<T: PageSize> Add<Size<NumOfPages<T>>> for Size<NumOfPages<T>> {
-    type Output = Size<NumOfPages<T>>;
+impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
 
-    fn add(self, rhs: Size<NumOfPages<T>>) -> Self {
-        Self::new(self.val + rhs.val)
+    fn sub(self, rhs: NumOfPages<T>) -> Self {
+        Self::new(self.num_of_pages - rhs.num_of_pages)
     }
 }
 
-impl Sub<Size<Bytes>> for Size<Bytes> {
-    type Output = Size<Bytes>;
-
-    fn sub(self, rhs: Size<Bytes>) -> Self {
-        Self::new(self.val - rhs.val)
+impl AddAssign for Bytes {
+    fn add_assign(&mut self, rhs: Bytes) {
+        self.bytes += rhs.bytes;
     }
 }
 
-impl<T: PageSize> Sub<Size<NumOfPages<T>>> for Size<NumOfPages<T>> {
-    type Output = Size<NumOfPages<T>>;
-
-    fn sub(self, rhs: Size<NumOfPages<T>>) -> Self {
-        Self::new(self.val - rhs.val)
+impl<T: PageSize> AddAssign for NumOfPages<T> {
+    fn add_assign(&mut self, rhs: NumOfPages<T>) {
+        self.num_of_pages += rhs.num_of_pages;
     }
 }
 
-impl AddAssign for Size<Bytes> {
-    fn add_assign(&mut self, rhs: Size<Bytes>) {
-        *self = Self {
-            val: self.val + rhs.val,
-            ..*self
-        }
+impl SubAssign for Bytes {
+    fn sub_assign(&mut self, rhs: Bytes) {
+        self.bytes -= rhs.bytes;
     }
 }
 
-impl<T: PageSize> AddAssign for Size<NumOfPages<T>> {
-    fn add_assign(&mut self, rhs: Size<NumOfPages<T>>) {
-        *self = Self {
-            val: self.val + rhs.val,
-            ..*self
-        }
+impl<T: PageSize> SubAssign for NumOfPages<T> {
+    fn sub_assign(&mut self, rhs: NumOfPages<T>) {
+        self.num_of_pages -= rhs.num_of_pages;
     }
 }
 
-impl SubAssign for Size<Bytes> {
-    fn sub_assign(&mut self, rhs: Size<Bytes>) {
-        *self = Self {
-            val: self.val - rhs.val,
-            ..*self
-        }
-    }
-}
-
-impl<T: PageSize> SubAssign for Size<NumOfPages<T>> {
-    fn sub_assign(&mut self, rhs: Size<NumOfPages<T>>) {
-        *self = Self {
-            val: self.val - rhs.val,
-            ..*self
-        }
-    }
-}
-
-impl Mul for Size<Bytes> {
-    type Output = Size<Bytes>;
-    fn mul(self, rhs: Size<Bytes>) -> Self::Output {
+impl Mul for Bytes {
+    type Output = Bytes;
+    fn mul(self, rhs: Bytes) -> Self::Output {
         Self {
-            val: self.val * rhs.val,
+            bytes: self.bytes * rhs.bytes,
             ..self
         }
     }
 }
 
-impl Mul<usize> for Size<Bytes> {
-    type Output = Size<Bytes>;
+impl Mul<usize> for Bytes {
+    type Output = Bytes;
     fn mul(self, rhs: usize) -> Self::Output {
         Self {
-            val: self.val * rhs,
+            bytes: self.bytes * rhs,
             ..self
         }
     }
 }
 
-impl<T: PageSize> Mul for Size<NumOfPages<T>> {
-    type Output = Size<NumOfPages<T>>;
-    fn mul(self, rhs: Size<NumOfPages<T>>) -> Self::Output {
+impl<T: PageSize> Mul for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+    fn mul(self, rhs: NumOfPages<T>) -> Self::Output {
         Self {
-            val: self.val * rhs.val,
+            num_of_pages: self.num_of_pages * rhs.num_of_pages,
             ..self
         }
     }
 }
 
-impl<T: PageSize> Mul<usize> for Size<NumOfPages<T>> {
-    type Output = Size<NumOfPages<T>>;
+impl<T: PageSize> Mul<usize> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
     fn mul(self, rhs: usize) -> Self::Output {
         Self {
-            val: self.val * rhs,
+            num_of_pages: self.num_of_pages * rhs,
             ..self
         }
     }
@@ -205,19 +183,19 @@ mod tests {
 
     #[test]
     fn get_value_from_bytes() {
-        let bytes = Size::<Bytes>::new(334);
+        let bytes = Bytes::new(334);
         assert_eq!(bytes.as_usize(), 334);
     }
 
     #[test]
     fn get_value_from_num_of_pages() {
-        let pages = Size::<NumOfPages<Size4KiB>>::new(334);
+        let pages = NumOfPages::<Size4KiB>::new(334);
         assert_eq!(pages.as_usize(), 334);
     }
 
     #[test]
     fn bytes_to_pages() {
-        let bytes = Size::<Bytes>::new(0x40000000);
+        let bytes = Bytes::new(0x40000000);
         assert_eq!(bytes.as_num_of_pages::<Size4KiB>().as_usize(), 0x40000);
         assert_eq!(bytes.as_num_of_pages::<Size2MiB>().as_usize(), 512);
         assert_eq!(bytes.as_num_of_pages::<Size1GiB>().as_usize(), 1);
@@ -225,26 +203,26 @@ mod tests {
 
     #[test]
     fn pages_to_bytes_4k() {
-        let num_of_pages = Size::<NumOfPages<Size4KiB>>::new(1);
+        let num_of_pages = NumOfPages::<Size4KiB>::new(1);
         assert_eq!(num_of_pages.as_bytes().as_usize(), 0x1000);
     }
 
     #[test]
     fn pages_to_bytes_2m() {
-        let num_of_pages = Size::<NumOfPages<Size2MiB>>::new(1);
+        let num_of_pages = NumOfPages::<Size2MiB>::new(1);
         assert_eq!(num_of_pages.as_bytes().as_usize(), 0x200000);
     }
 
     #[test]
     fn pages_to_bytes_1g() {
-        let num_of_pages = Size::<NumOfPages<Size1GiB>>::new(1);
+        let num_of_pages = NumOfPages::<Size1GiB>::new(1);
         assert_eq!(num_of_pages.as_bytes().as_usize(), 0x40000000);
     }
 
     #[test]
     fn addition_bytes_to_bytes() {
-        let b1 = Size::<Bytes>::new(3);
-        let b2 = Size::<Bytes>::new(1);
+        let b1 = Bytes::new(3);
+        let b2 = Bytes::new(1);
         let sum = b1 + b2;
 
         assert_eq!(sum.as_usize(), 4);
@@ -252,8 +230,8 @@ mod tests {
 
     #[test]
     fn addition_pages_to_pages() {
-        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
-        let p2 = Size::<NumOfPages<Size4KiB>>::new(1);
+        let p1 = NumOfPages::<Size4KiB>::new(3);
+        let p2 = NumOfPages::<Size4KiB>::new(1);
         let sum = p1 + p2;
 
         assert_eq!(sum.as_usize(), 4);
@@ -261,8 +239,8 @@ mod tests {
 
     #[test]
     fn subtraction_bytes_from_bytes() {
-        let b1 = Size::<Bytes>::new(3);
-        let b2 = Size::<Bytes>::new(1);
+        let b1 = Bytes::new(3);
+        let b2 = Bytes::new(1);
         let diff = b1 - b2;
 
         assert_eq!(diff.as_usize(), 2);
@@ -270,8 +248,8 @@ mod tests {
 
     #[test]
     fn subtraction_pages_from_pages() {
-        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
-        let p2 = Size::<NumOfPages<Size4KiB>>::new(1);
+        let p1 = NumOfPages::<Size4KiB>::new(3);
+        let p2 = NumOfPages::<Size4KiB>::new(1);
         let diff = p1 - p2;
 
         assert_eq!(diff.as_usize(), 2);
@@ -279,40 +257,40 @@ mod tests {
 
     #[test]
     fn add_assign_bytes_to_bytes() {
-        let mut b1 = Size::<Bytes>::new(3);
-        b1 += Size::<Bytes>::new(1);
+        let mut b1 = Bytes::new(3);
+        b1 += Bytes::new(1);
 
         assert_eq!(b1.as_usize(), 4);
     }
 
     #[test]
     fn add_assign_pages_to_pages() {
-        let mut p1 = Size::<NumOfPages<Size4KiB>>::new(3);
-        p1 += Size::<NumOfPages<Size4KiB>>::new(1);
+        let mut p1 = NumOfPages::<Size4KiB>::new(3);
+        p1 += NumOfPages::<Size4KiB>::new(1);
 
         assert_eq!(p1.as_usize(), 4);
     }
 
     #[test]
     fn sub_assign_bytes_to_bytes() {
-        let mut b1 = Size::<Bytes>::new(3);
-        b1 -= Size::<Bytes>::new(1);
+        let mut b1 = Bytes::new(3);
+        b1 -= Bytes::new(1);
 
         assert_eq!(b1.as_usize(), 2);
     }
 
     #[test]
     fn sub_assign_pages_to_pages() {
-        let mut p1 = Size::<NumOfPages<Size4KiB>>::new(3);
-        p1 -= Size::<NumOfPages<Size4KiB>>::new(1);
+        let mut p1 = NumOfPages::<Size4KiB>::new(3);
+        p1 -= NumOfPages::<Size4KiB>::new(1);
 
         assert_eq!(p1.as_usize(), 2);
     }
 
     #[test]
     fn mul_from_bytes_to_bytes() {
-        let b1 = Size::<Bytes>::new(3);
-        let b2 = Size::<Bytes>::new(4);
+        let b1 = Bytes::new(3);
+        let b2 = Bytes::new(4);
         let mul = b1 * b2;
 
         assert_eq!(mul.as_usize(), 12);
@@ -320,8 +298,8 @@ mod tests {
 
     #[test]
     fn mul_from_pages_to_pages() {
-        let p1 = Size::<NumOfPages<Size4KiB>>::new(3);
-        let p2 = Size::<NumOfPages<Size4KiB>>::new(4);
+        let p1 = NumOfPages::<Size4KiB>::new(3);
+        let p2 = NumOfPages::<Size4KiB>::new(4);
         let mul = p1 * p2;
 
         assert_eq!(mul.as_usize(), 12);
@@ -329,7 +307,7 @@ mod tests {
 
     #[test]
     fn mul_bytes_by_usize() {
-        let b = Size::<Bytes>::new(3);
+        let b = Bytes::new(3);
         let mul = b * 4;
 
         assert_eq!(mul.as_usize(), 12);
@@ -337,7 +315,7 @@ mod tests {
 
     #[test]
     fn mul_pages_by_usize() {
-        let p = Size::<NumOfPages<Size4KiB>>::new(3);
+        let p = NumOfPages::<Size4KiB>::new(3);
         let mul = p * 4;
 
         assert_eq!(mul.as_usize(), 12);
