@@ -37,7 +37,7 @@ use {
 
 #[repr(transparent)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-/// A struct containing the value with the unit specified by generic type.
+/// A struct representing byte size.
 pub struct Bytes {
     bytes: usize,
 }
@@ -60,6 +60,7 @@ impl Bytes {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+/// A struct A struct representing the number of pages.
 pub struct NumOfPages<T: PageSize> {
     num_of_pages: usize,
     _marker: PhantomData<fn() -> T>,

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.4 - 2020-10-25
+
+- Fix doc.
+- Fix README.
+
 ## 0.2.3 - 2020-10-24
 
 - Implement `DivAssign` trait.
