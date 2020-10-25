@@ -12,10 +12,10 @@ pages.
 ## Examples
 
 ```rust
-use os_units::{Size, Bytes};
+use os_units::Bytes;
 use x86_64::structures::paging::{PageSize, Size4KiB};
 
-let bytes_of_kernel = Size::<Bytes>::new(314159);
+let bytes_of_kernel = Bytes::new(314159);
 let pages_of_kernel = bytes_of_kernel.as_num_of_pages::<Size4KiB>();
 assert_eq!(pages_of_kernel.as_usize(), 77);
 
