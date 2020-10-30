@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 - 2020-10-30
+
+- Implement `AddAssign` with `usize`
+
 ## 0.2.4 - 2020-10-25
 
 - Fix doc.

@@ -129,6 +129,18 @@ impl<T: PageSize> AddAssign for NumOfPages<T> {
     }
 }
 
+impl AddAssign<usize> for Bytes {
+    fn add_assign(&mut self, rhs: usize) {
+        self.bytes += rhs;
+    }
+}
+
+impl<T: PageSize> AddAssign<usize> for NumOfPages<T> {
+    fn add_assign(&mut self, rhs: usize) {
+        self.num_of_pages += rhs;
+    }
+}
+
 impl SubAssign for Bytes {
     fn sub_assign(&mut self, rhs: Bytes) {
         self.bytes -= rhs.bytes;
@@ -329,6 +341,22 @@ mod tests {
     fn add_assign_pages_to_pages() {
         let mut p1 = NumOfPages::<Size4KiB>::new(3);
         p1 += NumOfPages::<Size4KiB>::new(1);
+
+        assert_eq!(p1.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_assign_usize_to_bytes() {
+        let mut b1 = Bytes::new(3);
+        b1 += 1;
+
+        assert_eq!(b1.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_assign_usize_to_pages() {
+        let mut p1 = NumOfPages::<Size4KiB>::new(3);
+        p1 += 1;
 
         assert_eq!(p1.as_usize(), 4);
     }
