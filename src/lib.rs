@@ -47,6 +47,11 @@ impl Bytes {
         Self { bytes }
     }
 
+    /// Equivalent to `Bytes::new(0)`.
+    pub const fn zero() -> Self {
+        Self::new(0)
+    }
+
     /// Returns the value.
     pub const fn as_usize(self) -> usize {
         self.bytes
@@ -72,6 +77,11 @@ impl<T: PageSize> NumOfPages<T> {
             num_of_pages,
             _marker: PhantomData,
         }
+    }
+
+    /// Equivalent to `NumOfPages::new(0)`.
+    pub const fn zero() -> Self {
+        Self::new(0)
     }
 
     /// Returns the value.
@@ -473,5 +483,19 @@ mod tests {
         p /= 2;
 
         assert_eq!(p.as_usize(), 1);
+    }
+
+    #[test]
+    fn bytes_zero() {
+        let b = Bytes::zero();
+
+        assert_eq!(b.as_usize(), 0);
+    }
+
+    #[test]
+    fn num_of_pages_zero() {
+        let n = NumOfPages::<Size4KiB>::zero();
+
+        assert_eq!(n.as_usize(), 0);
     }
 }
