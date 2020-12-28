@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6 - 2020-12-28
+
+- Implement `zero` method.
+
 ## 0.2.5 - 2020-10-30
 
 - Implement `AddAssign` with `usize`
