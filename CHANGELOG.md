@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.7 - 2020-12-29
+
+- Update the version of `x86_64` crate to 0.13.0
+
 ## 0.2.6 - 2020-12-28
 
 - Implement `zero` method.
