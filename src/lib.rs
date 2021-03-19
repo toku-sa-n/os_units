@@ -64,6 +64,77 @@ impl Bytes {
         NumOfPages::new((self.bytes + T::SIZE as usize - 1) / T::SIZE as usize)
     }
 }
+impl Add<Bytes> for Bytes {
+    type Output = Bytes;
+
+    fn add(self, rhs: Bytes) -> Self {
+        Self::new(self.bytes + rhs.bytes)
+    }
+}
+impl Sub<Bytes> for Bytes {
+    type Output = Bytes;
+
+    fn sub(self, rhs: Bytes) -> Self {
+        Self::new(self.bytes - rhs.bytes)
+    }
+}
+impl AddAssign for Bytes {
+    fn add_assign(&mut self, rhs: Bytes) {
+        self.bytes += rhs.bytes;
+    }
+}
+impl AddAssign<usize> for Bytes {
+    fn add_assign(&mut self, rhs: usize) {
+        self.bytes += rhs;
+    }
+}
+impl SubAssign for Bytes {
+    fn sub_assign(&mut self, rhs: Bytes) {
+        self.bytes -= rhs.bytes;
+    }
+}
+impl Mul for Bytes {
+    type Output = Bytes;
+    fn mul(self, rhs: Bytes) -> Self::Output {
+        Self {
+            bytes: self.bytes * rhs.bytes,
+            ..self
+        }
+    }
+}
+impl Mul<usize> for Bytes {
+    type Output = Bytes;
+    fn mul(self, rhs: usize) -> Self::Output {
+        Self {
+            bytes: self.bytes * rhs,
+            ..self
+        }
+    }
+}
+impl MulAssign for Bytes {
+    fn mul_assign(&mut self, rhs: Bytes) {
+        *self = *self * rhs;
+    }
+}
+impl MulAssign<usize> for Bytes {
+    fn mul_assign(&mut self, rhs: usize) {
+        *self = *self * rhs;
+    }
+}
+impl Div<usize> for Bytes {
+    type Output = Bytes;
+
+    fn div(self, rhs: usize) -> Self::Output {
+        Self {
+            bytes: self.bytes / rhs,
+        }
+    }
+}
+impl DivAssign<usize> for Bytes {
+    fn div_assign(&mut self, rhs: usize) {
+        *self = *self / rhs;
+    }
+}
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 /// A struct representing the number of pages.
@@ -95,15 +166,6 @@ impl<T: PageSize> NumOfPages<T> {
         Bytes::new(self.num_of_pages * T::SIZE as usize)
     }
 }
-
-impl Add<Bytes> for Bytes {
-    type Output = Bytes;
-
-    fn add(self, rhs: Bytes) -> Self {
-        Self::new(self.bytes + rhs.bytes)
-    }
-}
-
 impl<T: PageSize> Add<NumOfPages<T>> for NumOfPages<T> {
     type Output = NumOfPages<T>;
 
@@ -111,15 +173,6 @@ impl<T: PageSize> Add<NumOfPages<T>> for NumOfPages<T> {
         Self::new(self.num_of_pages + rhs.num_of_pages)
     }
 }
-
-impl Sub<Bytes> for Bytes {
-    type Output = Bytes;
-
-    fn sub(self, rhs: Bytes) -> Self {
-        Self::new(self.bytes - rhs.bytes)
-    }
-}
-
 impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
     type Output = NumOfPages<T>;
 
@@ -127,63 +180,21 @@ impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
         Self::new(self.num_of_pages - rhs.num_of_pages)
     }
 }
-
-impl AddAssign for Bytes {
-    fn add_assign(&mut self, rhs: Bytes) {
-        self.bytes += rhs.bytes;
-    }
-}
-
 impl<T: PageSize> AddAssign for NumOfPages<T> {
     fn add_assign(&mut self, rhs: NumOfPages<T>) {
         self.num_of_pages += rhs.num_of_pages;
     }
 }
-
-impl AddAssign<usize> for Bytes {
-    fn add_assign(&mut self, rhs: usize) {
-        self.bytes += rhs;
-    }
-}
-
 impl<T: PageSize> AddAssign<usize> for NumOfPages<T> {
     fn add_assign(&mut self, rhs: usize) {
         self.num_of_pages += rhs;
     }
 }
-
-impl SubAssign for Bytes {
-    fn sub_assign(&mut self, rhs: Bytes) {
-        self.bytes -= rhs.bytes;
-    }
-}
-
 impl<T: PageSize> SubAssign for NumOfPages<T> {
     fn sub_assign(&mut self, rhs: NumOfPages<T>) {
         self.num_of_pages -= rhs.num_of_pages;
     }
 }
-
-impl Mul for Bytes {
-    type Output = Bytes;
-    fn mul(self, rhs: Bytes) -> Self::Output {
-        Self {
-            bytes: self.bytes * rhs.bytes,
-            ..self
-        }
-    }
-}
-
-impl Mul<usize> for Bytes {
-    type Output = Bytes;
-    fn mul(self, rhs: usize) -> Self::Output {
-        Self {
-            bytes: self.bytes * rhs,
-            ..self
-        }
-    }
-}
-
 impl<T: PageSize> Mul for NumOfPages<T> {
     type Output = NumOfPages<T>;
     fn mul(self, rhs: NumOfPages<T>) -> Self::Output {
@@ -193,7 +204,6 @@ impl<T: PageSize> Mul for NumOfPages<T> {
         }
     }
 }
-
 impl<T: PageSize> Mul<usize> for NumOfPages<T> {
     type Output = NumOfPages<T>;
     fn mul(self, rhs: usize) -> Self::Output {
@@ -203,41 +213,16 @@ impl<T: PageSize> Mul<usize> for NumOfPages<T> {
         }
     }
 }
-
-impl MulAssign for Bytes {
-    fn mul_assign(&mut self, rhs: Bytes) {
-        *self = *self * rhs;
-    }
-}
-
-impl MulAssign<usize> for Bytes {
-    fn mul_assign(&mut self, rhs: usize) {
-        *self = *self * rhs;
-    }
-}
-
 impl<T: PageSize> MulAssign for NumOfPages<T> {
     fn mul_assign(&mut self, rhs: NumOfPages<T>) {
         *self = *self * rhs;
     }
 }
-
 impl<T: PageSize> MulAssign<usize> for NumOfPages<T> {
     fn mul_assign(&mut self, rhs: usize) {
         *self = *self * rhs;
     }
 }
-
-impl Div<usize> for Bytes {
-    type Output = Bytes;
-
-    fn div(self, rhs: usize) -> Self::Output {
-        Self {
-            bytes: self.bytes / rhs,
-        }
-    }
-}
-
 impl<T: PageSize> Div<usize> for NumOfPages<T> {
     type Output = NumOfPages<T>;
 
@@ -248,13 +233,6 @@ impl<T: PageSize> Div<usize> for NumOfPages<T> {
         }
     }
 }
-
-impl DivAssign<usize> for Bytes {
-    fn div_assign(&mut self, rhs: usize) {
-        *self = *self / rhs;
-    }
-}
-
 impl<T: PageSize> DivAssign<usize> for NumOfPages<T> {
     fn div_assign(&mut self, rhs: usize) {
         *self = *self / rhs;
