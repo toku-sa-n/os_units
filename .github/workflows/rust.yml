@@ -16,5 +16,9 @@ jobs:
       run: rustup override set nightly
     - name: Build
       run: cargo build --verbose
+    - name: Clippy
+      run: |
+        rustup component add clippy
+        cargo clippy
     - name: Run tests
       run: cargo test --verbose
