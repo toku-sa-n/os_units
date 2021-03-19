@@ -12,8 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup nightly
-      run: rustup override set nightly
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        components: clippy
+        override: true
     - name: Build
       run: cargo build --verbose
     - name: Clippy
