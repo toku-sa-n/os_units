@@ -17,8 +17,9 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Clippy
-      run: |
-        rustup component add clippy
-        cargo clippy
+      uses: action-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --all-features
     - name: Run tests
       run: cargo test --verbose
