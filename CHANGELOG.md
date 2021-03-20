@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+## Added
+- `Bytes` and `NumOfPages` now implements `Add<usize>`.
+
 ### Changed
 - `#[must_use]` attribute is added to some methods.
 
