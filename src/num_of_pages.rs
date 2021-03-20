@@ -280,10 +280,26 @@ mod tests {
     }
 
     #[test]
-    fn debug() {
+    fn debug_4k() {
         let n = NumOfPages::<Size4KiB>::new(3);
         let f = format!("{:?}", n);
 
         assert_eq!(format!("NumOfPages::<4KiB>(3)"), f);
+    }
+
+    #[test]
+    fn debug_2m() {
+        let n = NumOfPages::<Size2MiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<2MiB>(3)"), f);
+    }
+
+    #[test]
+    fn debug_1g() {
+        let n = NumOfPages::<Size1GiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<1GiB>(3)"), f);
     }
 }
