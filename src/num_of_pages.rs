@@ -138,6 +138,23 @@ impl<T: PageSize> fmt::Debug for NumOfPages<T> {
         )
     }
 }
+impl<T: PageSize> fmt::Display for NumOfPages<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let unit = if self.num_of_pages == 1 {
+            "page"
+        } else {
+            "pages"
+        };
+
+        write!(
+            f,
+            "{} {} ({})",
+            self.num_of_pages,
+            unit,
+            T::SIZE_AS_DEBUG_STR
+        )
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -302,5 +319,45 @@ mod tests {
         let f = format!("{:?}", n);
 
         assert_eq!(format!("NumOfPages::<1GiB>(3)"), f);
+    }
+
+    #[test]
+    fn display_0() {
+        let n = NumOfPages::<Size4KiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (4KiB)"), f);
+    }
+
+    #[test]
+    fn display_1() {
+        let n = NumOfPages::<Size4KiB>::new(1);
+        let f = format!("{}", n);
+
+        assert_eq!(format!("1 page (4KiB)"), f);
+    }
+
+    #[test]
+    fn display_2() {
+        let n = NumOfPages::<Size4KiB>::new(2);
+        let f = format!("{}", n);
+
+        assert_eq!(format!("2 pages (4KiB)"), f);
+    }
+
+    #[test]
+    fn display_2m() {
+        let n = NumOfPages::<Size2MiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (2MiB)"), f);
+    }
+
+    #[test]
+    fn display_1g() {
+        let n = NumOfPages::<Size1GiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (1GiB)"), f);
     }
 }
