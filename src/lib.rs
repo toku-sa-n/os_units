@@ -1,7 +1,3 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 //! This crate provides a data structure for byte size. With
 //! [`x86_64`](https://github.com/rust-osdev/x86_64) crate, you can easily convert
 //! the size of physical memory pages into bytes, and bytes into the number of physical memory

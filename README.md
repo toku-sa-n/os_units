@@ -23,4 +23,4 @@ let bytes_of_pages = pages_of_kernel.as_bytes();
 assert_eq!(bytes_of_pages.as_usize(), 315392);
 ```
 
-License: MPL-2.0
+License: MIT OR Apache-2.0
