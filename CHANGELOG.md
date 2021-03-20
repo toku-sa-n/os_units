@@ -8,7 +8,7 @@
 - `#[must_use]` attribute is added to some methods.
 
 ### Removed
-- The implementations of `Mul` and `MulAssign` for the product of `Bytes` and `Bytes`, and `NumOfPages` and `NumOfPages` are removed. The units of these products are either the square of `Bytes` or `NumOfPages`, and not just `Bytes` or `NumOfPages`.
+- The implementations of `Mul` and `MulAssign` for the product of `Bytes` * `Bytes`, and `NumOfPages` * `NumOfPages` are removed. The units of these products are either the square of `Bytes` or `NumOfPages`, and not just `Bytes` or `NumOfPages`.
 
 ## 0.2.7 - 2020-12-29
 
