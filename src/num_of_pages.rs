@@ -309,7 +309,7 @@ mod tests {
         let n = NumOfPages::<Size4KiB>::zero();
         let f = format!("{}", n);
 
-        assert_eq!(format!("0 pages (4KiB)", f));
+        assert_eq!(format!("0 pages (4KiB)"), f);
     }
 
     #[test]
@@ -317,7 +317,7 @@ mod tests {
         let n = NumOfPages::<Size4KiB>::new(1);
         let f = format!("{}", n);
 
-        assert_eq!(format!("1 page (4KiB)", f));
+        assert_eq!(format!("1 page (4KiB)"), f);
     }
 
     #[test]
