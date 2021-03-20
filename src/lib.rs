@@ -121,6 +121,13 @@ impl Sub for Bytes {
         Self::new(self.0 - rhs.0)
     }
 }
+impl Sub<usize> for Bytes {
+    type Output = Bytes;
+
+    fn sub(self, rhs: usize) -> Self::Output {
+        Self::new(self.0 - rhs)
+    }
+}
 impl SubAssign for Bytes {
     fn sub_assign(&mut self, rhs: Bytes) {
         self.0 -= rhs.0;
@@ -214,6 +221,13 @@ impl<T: PageSize> Sub for NumOfPages<T> {
 
     fn sub(self, rhs: NumOfPages<T>) -> Self {
         Self::new(self.num_of_pages - rhs.num_of_pages)
+    }
+}
+impl<T: PageSize> Sub<usize> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn sub(self, rhs: usize) -> Self::Output {
+        Self::new(self.num_of_pages - rhs)
     }
 }
 impl<T: PageSize> SubAssign for NumOfPages<T> {
