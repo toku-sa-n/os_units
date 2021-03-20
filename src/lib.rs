@@ -60,7 +60,7 @@ use {
 };
 
 #[repr(transparent)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// A struct representing byte size.
 pub struct Bytes(usize);
 impl Bytes {
@@ -162,7 +162,7 @@ impl DivAssign<usize> for Bytes {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// A struct representing the number of pages.
 pub struct NumOfPages<T: PageSize> {
     num_of_pages: usize,
