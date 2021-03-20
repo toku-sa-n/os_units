@@ -345,6 +345,20 @@ mod tests {
     }
 
     #[test]
+    fn subtract_usize_from_bytes() {
+        let b = Bytes::new(5);
+
+        assert_eq!(b - 3, Bytes::new(2));
+    }
+
+    #[test]
+    fn subtract_usize_from_num_of_pages() {
+        let n = NumOfPages::<Size4KiB>::new(5);
+
+        assert_eq!(n - 3, NumOfPages::new(2));
+    }
+
+    #[test]
     fn add_assign_bytes_to_bytes() {
         let mut b1 = Bytes::new(3);
         b1 += Bytes::new(1);
