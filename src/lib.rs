@@ -1,4 +1,4 @@
-//! This crate provides a data structure for byte size. With
+//! This crate provides a data structure for byte size. With the
 //! [`x86_64`](https://github.com/rust-osdev/x86_64) crate, you can easily convert
 //! the size of physical memory pages into bytes, and bytes into the number of physical memory
 //! pages.
