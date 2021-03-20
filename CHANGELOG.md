@@ -4,6 +4,9 @@
 ### Changed
 - `#[must_use]` attribute is added to some methods.
 
+### Removed
+- The implementations of `Mul` and `MulAssign` for the product of `Bytes` and `Bytes`, and `NumOfPages` and `NumOfPages` are removed. The units of these products are either the square of `Bytes` or `NumOfPages`, and not just `Bytes` or `NumOfPages`.
+
 ## 0.2.7 - 2020-12-29
 
 - Update the version of `x86_64` crate to 0.13.0
