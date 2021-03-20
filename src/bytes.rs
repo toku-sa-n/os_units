@@ -245,4 +245,12 @@ mod tests {
 
         assert_eq!(b, Bytes::new(3));
     }
+
+    #[test]
+    fn debug() {
+        let b = Bytes::new(3);
+        let f = format!("{:?}", b);
+
+        assert_eq!(f, format!("Bytes(3)"));
+    }
 }

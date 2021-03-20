@@ -23,7 +23,7 @@
 //! let bytes_of_pages = pages_of_kernel.as_bytes();
 //! assert_eq!(bytes_of_pages.as_usize(), 315392);
 //! ```
-#![no_std]
+#![cfg_attr(not(test), no_std)]
 #![feature(const_fn)]
 #![feature(const_fn_fn_ptr_basics)]
 #![deny(
