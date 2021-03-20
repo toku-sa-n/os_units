@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - ReleaseDate
+### Changed
+- `#[must_use]` attribute is added to some methods.
+
 ## 0.2.7 - 2020-12-29
 
 - Update the version of `x86_64` crate to 0.13.0
