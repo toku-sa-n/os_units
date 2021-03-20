@@ -26,6 +26,29 @@
 #![no_std]
 #![feature(const_fn)]
 #![feature(const_fn_fn_ptr_basics)]
+#![deny(
+    warnings,
+    rustdoc::all,
+    missing_docs,
+    elided_lifetimes_in_paths,
+    explicit_outlives_requirements,
+    macro_use_extern_crate,
+    missing_copy_implementations,
+    meta_variable_misuse,
+    non_ascii_idents,
+    private_doc_tests,
+    single_use_lifetimes,
+    unaligned_references,
+    unreachable_pub,
+    unused_crate_dependencies,
+    unused_extern_crates,
+    trivial_casts,
+    unused_import_braces,
+    unused_lifetimes,
+    unused_qualifications,
+    pointer_structural_match,
+    missing_debug_implementations
+)]
 #![deny(clippy::all, clippy::pedantic)]
 
 use {
