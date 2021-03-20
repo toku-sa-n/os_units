@@ -122,6 +122,11 @@ impl<T: PageSize> DivAssign<usize> for NumOfPages<T> {
         *self = *self / rhs;
     }
 }
+impl<T: PageSize> From<usize> for NumOfPages<T> {
+    fn from(n: usize) -> Self {
+        Self::new(n)
+    }
+}
 
 #[cfg(test)]
 mod tests {
