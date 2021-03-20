@@ -138,6 +138,23 @@ impl<T: PageSize> fmt::Debug for NumOfPages<T> {
         )
     }
 }
+impl<T: PageSize> fmt::Display for NumOfPages<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let unit = if self.num_of_pages == 1 {
+            "page"
+        } else {
+            "pages"
+        };
+
+        write!(
+            f,
+            "{} {} ({})",
+            self.num_of_pages,
+            unit,
+            T::SIZE_AS_DEBUG_STR
+        )
+    }
+}
 
 #[cfg(test)]
 mod tests {

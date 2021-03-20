@@ -1,4 +1,5 @@
 use crate::NumOfPages;
+use core::fmt;
 use core::ops::Add;
 use core::ops::AddAssign;
 use core::ops::Div;
@@ -114,6 +115,12 @@ impl DivAssign<usize> for Bytes {
 impl From<usize> for Bytes {
     fn from(b: usize) -> Self {
         Self::new(b)
+    }
+}
+impl fmt::Display for Bytes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let unit = if self.0 == 1 { "byte" } else { "bytes" };
+        write!(f, "{} {}", self.0, unit)
     }
 }
 
