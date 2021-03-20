@@ -6,6 +6,7 @@
 - The debug print of the `NumOfPages` type is improved.
 
 ### Changed
+- **LICENSE is changed from Mozilla Public License 2.0 to "MIT License OR Apache License 2.0"**.
 - `#[must_use]` attribute is added to some methods.
 
 ### Removed
