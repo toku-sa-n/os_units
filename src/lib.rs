@@ -107,7 +107,7 @@ impl AddAssign<usize> for Bytes {
         self.0 += rhs;
     }
 }
-impl Sub<Bytes> for Bytes {
+impl Sub for Bytes {
     type Output = Bytes;
 
     fn sub(self, rhs: Bytes) -> Self {
@@ -195,7 +195,7 @@ impl<T: PageSize> AddAssign<usize> for NumOfPages<T> {
         self.num_of_pages += rhs;
     }
 }
-impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
+impl<T: PageSize> Sub for NumOfPages<T> {
     type Output = NumOfPages<T>;
 
     fn sub(self, rhs: NumOfPages<T>) -> Self {
