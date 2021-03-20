@@ -90,7 +90,7 @@ impl Bytes {
         NumOfPages::new((self.0 + T::SIZE as usize - 1) / T::SIZE as usize)
     }
 }
-impl Add<Bytes> for Bytes {
+impl Add for Bytes {
     type Output = Bytes;
 
     fn add(self, rhs: Bytes) -> Self {
@@ -178,7 +178,7 @@ impl<T: PageSize> NumOfPages<T> {
         Bytes::new(self.num_of_pages * T::SIZE as usize)
     }
 }
-impl<T: PageSize> Add<NumOfPages<T>> for NumOfPages<T> {
+impl<T: PageSize> Add for NumOfPages<T> {
     type Output = NumOfPages<T>;
 
     fn add(self, rhs: NumOfPages<T>) -> Self {
