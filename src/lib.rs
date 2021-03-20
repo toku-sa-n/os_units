@@ -62,14 +62,12 @@ use {
 #[repr(transparent)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 /// A struct representing byte size.
-pub struct Bytes {
-    bytes: usize,
-}
+pub struct Bytes(usize);
 impl Bytes {
     /// Creates a new instance with given value.
     #[must_use]
     pub const fn new(bytes: usize) -> Self {
-        Self { bytes }
+        Self(bytes)
     }
 
     /// Equivalent to `Bytes::new(0)`.
@@ -81,7 +79,7 @@ impl Bytes {
     /// Returns the value.
     #[must_use]
     pub const fn as_usize(self) -> usize {
-        self.bytes
+        self.0
     }
 
     /// Converts bytes to the number of physical pages. Note that the number of physical pages will
@@ -89,52 +87,48 @@ impl Bytes {
     #[must_use]
     pub const fn as_num_of_pages<T: PageSize>(self) -> NumOfPages<T> {
         #[allow(clippy::cast_possible_truncation)]
-        NumOfPages::new((self.bytes + T::SIZE as usize - 1) / T::SIZE as usize)
+        NumOfPages::new((self.0 + T::SIZE as usize - 1) / T::SIZE as usize)
     }
 }
 impl Add<Bytes> for Bytes {
     type Output = Bytes;
 
     fn add(self, rhs: Bytes) -> Self {
-        Self::new(self.bytes + rhs.bytes)
+        Self::new(self.0 + rhs.0)
     }
 }
 impl Sub<Bytes> for Bytes {
     type Output = Bytes;
 
     fn sub(self, rhs: Bytes) -> Self {
-        Self::new(self.bytes - rhs.bytes)
+        Self::new(self.0 - rhs.0)
     }
 }
 impl AddAssign for Bytes {
     fn add_assign(&mut self, rhs: Bytes) {
-        self.bytes += rhs.bytes;
+        self.0 += rhs.0;
     }
 }
 impl AddAssign<usize> for Bytes {
     fn add_assign(&mut self, rhs: usize) {
-        self.bytes += rhs;
+        self.0 += rhs;
     }
 }
 impl SubAssign for Bytes {
     fn sub_assign(&mut self, rhs: Bytes) {
-        self.bytes -= rhs.bytes;
+        self.0 -= rhs.0;
     }
 }
 impl Mul for Bytes {
     type Output = Bytes;
     fn mul(self, rhs: Bytes) -> Self::Output {
-        Self {
-            bytes: self.bytes * rhs.bytes,
-        }
+        Self(self.0 * rhs.0)
     }
 }
 impl Mul<usize> for Bytes {
     type Output = Bytes;
     fn mul(self, rhs: usize) -> Self::Output {
-        Self {
-            bytes: self.bytes * rhs,
-        }
+        Self(self.0 * rhs)
     }
 }
 impl MulAssign for Bytes {
@@ -151,9 +145,7 @@ impl Div<usize> for Bytes {
     type Output = Bytes;
 
     fn div(self, rhs: usize) -> Self::Output {
-        Self {
-            bytes: self.bytes / rhs,
-        }
+        Self(self.0 / rhs)
     }
 }
 impl DivAssign<usize> for Bytes {
