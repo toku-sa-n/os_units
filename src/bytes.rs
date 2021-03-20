@@ -111,3 +111,126 @@ impl DivAssign<usize> for Bytes {
         *self = *self / rhs;
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use x86_64::structures::paging::{Size1GiB, Size2MiB, Size4KiB};
+
+    #[test]
+    fn get_value_from_bytes() {
+        let bytes = Bytes::new(334);
+        assert_eq!(bytes.as_usize(), 334);
+    }
+
+    #[test]
+    fn bytes_to_pages() {
+        let bytes = Bytes::new(0x40000000);
+        assert_eq!(bytes.as_num_of_pages::<Size4KiB>().as_usize(), 0x40000);
+        assert_eq!(bytes.as_num_of_pages::<Size2MiB>().as_usize(), 512);
+        assert_eq!(bytes.as_num_of_pages::<Size1GiB>().as_usize(), 1);
+    }
+
+    #[test]
+    fn addition_bytes_to_bytes() {
+        let b1 = Bytes::new(3);
+        let b2 = Bytes::new(1);
+        let sum = b1 + b2;
+
+        assert_eq!(sum.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_usize_to_bytes() {
+        let b = Bytes::new(3);
+
+        assert_eq!(b + 7, Bytes::new(10));
+    }
+
+    #[test]
+    fn subtraction_bytes_from_bytes() {
+        let b1 = Bytes::new(3);
+        let b2 = Bytes::new(1);
+        let diff = b1 - b2;
+
+        assert_eq!(diff.as_usize(), 2);
+    }
+
+    #[test]
+    fn subtract_usize_from_bytes() {
+        let b = Bytes::new(5);
+
+        assert_eq!(b - 3, Bytes::new(2));
+    }
+
+    #[test]
+    fn add_assign_bytes_to_bytes() {
+        let mut b1 = Bytes::new(3);
+        b1 += Bytes::new(1);
+
+        assert_eq!(b1.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_assign_usize_to_bytes() {
+        let mut b1 = Bytes::new(3);
+        b1 += 1;
+
+        assert_eq!(b1.as_usize(), 4);
+    }
+
+    #[test]
+    fn sub_assign_bytes_to_bytes() {
+        let mut b1 = Bytes::new(3);
+        b1 -= Bytes::new(1);
+
+        assert_eq!(b1.as_usize(), 2);
+    }
+
+    #[test]
+    fn sub_assign_usize_to_bytes() {
+        let mut b1 = Bytes::new(10);
+        b1 -= 3;
+
+        assert_eq!(b1, Bytes::new(7));
+    }
+
+    #[test]
+    fn mul_bytes_by_usize() {
+        let b = Bytes::new(3);
+        let mul = b * 4;
+
+        assert_eq!(mul.as_usize(), 12);
+    }
+
+    #[test]
+    fn mul_assign_bytes_by_usize() {
+        let mut b = Bytes::new(3);
+        b *= 4;
+
+        assert_eq!(b.as_usize(), 12);
+    }
+
+    #[test]
+    fn div_bytes_by_usize() {
+        let b1 = Bytes::new(3);
+        let div = b1 / 2;
+
+        assert_eq!(div.as_usize(), 1);
+    }
+
+    #[test]
+    fn divassign_bytes_by_usize() {
+        let mut b = Bytes::new(3);
+        b /= 2;
+
+        assert_eq!(b.as_usize(), 1);
+    }
+
+    #[test]
+    fn bytes_zero() {
+        let b = Bytes::zero();
+
+        assert_eq!(b.as_usize(), 0);
+    }
+}
