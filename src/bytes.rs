@@ -233,4 +233,11 @@ mod tests {
 
         assert_eq!(b.as_usize(), 0);
     }
+
+    #[test]
+    fn from() {
+        let b = Bytes::from(3);
+
+        assert_eq!(b, Bytes::new(3));
+    }
 }

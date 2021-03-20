@@ -256,4 +256,11 @@ mod tests {
 
         assert_eq!(n.as_usize(), 0);
     }
+
+    #[test]
+    fn from() {
+        let n = NumOfPages::<Size4KiB>::from(3);
+
+        assert_eq!(n, NumOfPages::new(3));
+    }
 }
