@@ -97,13 +97,6 @@ impl Add<Bytes> for Bytes {
         Self::new(self.0 + rhs.0)
     }
 }
-impl Sub<Bytes> for Bytes {
-    type Output = Bytes;
-
-    fn sub(self, rhs: Bytes) -> Self {
-        Self::new(self.0 - rhs.0)
-    }
-}
 impl AddAssign for Bytes {
     fn add_assign(&mut self, rhs: Bytes) {
         self.0 += rhs.0;
@@ -112,6 +105,13 @@ impl AddAssign for Bytes {
 impl AddAssign<usize> for Bytes {
     fn add_assign(&mut self, rhs: usize) {
         self.0 += rhs;
+    }
+}
+impl Sub<Bytes> for Bytes {
+    type Output = Bytes;
+
+    fn sub(self, rhs: Bytes) -> Self {
+        Self::new(self.0 - rhs.0)
     }
 }
 impl SubAssign for Bytes {
@@ -185,13 +185,6 @@ impl<T: PageSize> Add<NumOfPages<T>> for NumOfPages<T> {
         Self::new(self.num_of_pages + rhs.num_of_pages)
     }
 }
-impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
-    type Output = NumOfPages<T>;
-
-    fn sub(self, rhs: NumOfPages<T>) -> Self {
-        Self::new(self.num_of_pages - rhs.num_of_pages)
-    }
-}
 impl<T: PageSize> AddAssign for NumOfPages<T> {
     fn add_assign(&mut self, rhs: NumOfPages<T>) {
         self.num_of_pages += rhs.num_of_pages;
@@ -200,6 +193,13 @@ impl<T: PageSize> AddAssign for NumOfPages<T> {
 impl<T: PageSize> AddAssign<usize> for NumOfPages<T> {
     fn add_assign(&mut self, rhs: usize) {
         self.num_of_pages += rhs;
+    }
+}
+impl<T: PageSize> Sub<NumOfPages<T>> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn sub(self, rhs: NumOfPages<T>) -> Self {
+        Self::new(self.num_of_pages - rhs.num_of_pages)
     }
 }
 impl<T: PageSize> SubAssign for NumOfPages<T> {
