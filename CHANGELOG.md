@@ -3,6 +3,7 @@
 ## Unreleased - ReleaseDate
 ## Added
 - `Bytes` and `NumOfPages` now implements `Add<usize>`, `Sub<usize>`, `SubAssign<usize>`, `From<usize>`, and `Hash`.
+- The debug print of the `NumOfPages` type is improved.
 
 ### Changed
 - `#[must_use]` attribute is added to some methods.

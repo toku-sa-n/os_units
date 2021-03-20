@@ -1,4 +1,5 @@
 use crate::Bytes;
+use core::fmt;
 use core::marker::PhantomData;
 use core::ops::Add;
 use core::ops::AddAssign;
@@ -10,7 +11,7 @@ use core::ops::Sub;
 use core::ops::SubAssign;
 use x86_64::structures::paging::PageSize;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// A struct representing the number of pages.
 pub struct NumOfPages<T: PageSize> {
     num_of_pages: usize,
@@ -125,6 +126,15 @@ impl<T: PageSize> DivAssign<usize> for NumOfPages<T> {
 impl<T: PageSize> From<usize> for NumOfPages<T> {
     fn from(n: usize) -> Self {
         Self::new(n)
+    }
+}
+impl<T: PageSize> fmt::Debug for NumOfPages<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_fmt(format_args!(
+            "NumOfPages::<{}>({})",
+            T::SIZE_AS_DEBUG_STR,
+            self.num_of_pages
+        ))
     }
 }
 
@@ -267,5 +277,29 @@ mod tests {
         let n = NumOfPages::<Size4KiB>::from(3);
 
         assert_eq!(n, NumOfPages::new(3));
+    }
+
+    #[test]
+    fn debug_4k() {
+        let n = NumOfPages::<Size4KiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<4KiB>(3)"), f);
+    }
+
+    #[test]
+    fn debug_2m() {
+        let n = NumOfPages::<Size2MiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<2MiB>(3)"), f);
+    }
+
+    #[test]
+    fn debug_1g() {
+        let n = NumOfPages::<Size1GiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<1GiB>(3)"), f);
     }
 }
