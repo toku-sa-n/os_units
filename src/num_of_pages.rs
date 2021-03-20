@@ -268,4 +268,12 @@ mod tests {
 
         assert_eq!(n, NumOfPages::new(3));
     }
+
+    #[test]
+    fn debug() {
+        let n = NumOfPages::<Size4KiB>::new(3);
+        let f = format!("{:?}", n);
+
+        assert_eq!(format!("NumOfPages::<Size4KiB>(3)"), f);
+    }
 }
