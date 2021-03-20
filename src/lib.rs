@@ -97,6 +97,13 @@ impl Add for Bytes {
         Self::new(self.0 + rhs.0)
     }
 }
+impl Add<usize> for Bytes {
+    type Output = Bytes;
+
+    fn add(self, rhs: usize) -> Self::Output {
+        Self::new(self.0 + rhs)
+    }
+}
 impl AddAssign for Bytes {
     fn add_assign(&mut self, rhs: Bytes) {
         self.0 += rhs.0;
@@ -183,6 +190,13 @@ impl<T: PageSize> Add for NumOfPages<T> {
 
     fn add(self, rhs: NumOfPages<T>) -> Self {
         Self::new(self.num_of_pages + rhs.num_of_pages)
+    }
+}
+impl<T: PageSize> Add<usize> for NumOfPages<T> {
+    type Output = NumOfPages<T>;
+
+    fn add(self, rhs: usize) -> Self::Output {
+        Self::new(self.num_of_pages + rhs)
     }
 }
 impl<T: PageSize> AddAssign for NumOfPages<T> {
@@ -296,6 +310,20 @@ mod tests {
         let sum = p1 + p2;
 
         assert_eq!(sum.as_usize(), 4);
+    }
+
+    #[test]
+    fn add_usize_to_bytes() {
+        let b = Bytes::new(3);
+
+        assert_eq!(b + 7, Bytes::new(10));
+    }
+
+    #[test]
+    fn add_usize_to_num_of_pages() {
+        let n = NumOfPages::<Size4KiB>::new(3);
+
+        assert_eq!(n + 7, NumOfPages::new(10));
     }
 
     #[test]
