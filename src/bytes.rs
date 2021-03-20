@@ -111,6 +111,11 @@ impl DivAssign<usize> for Bytes {
         *self = *self / rhs;
     }
 }
+impl From<usize> for Bytes {
+    fn from(b: usize) -> Self {
+        Self::new(b)
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -232,5 +237,12 @@ mod tests {
         let b = Bytes::zero();
 
         assert_eq!(b.as_usize(), 0);
+    }
+
+    #[test]
+    fn from() {
+        let b = Bytes::from(3);
+
+        assert_eq!(b, Bytes::new(3));
     }
 }
