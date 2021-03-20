@@ -413,11 +413,27 @@ mod tests {
     }
 
     #[test]
+    fn sub_assign_usize_to_bytes() {
+        let mut b1 = Bytes::new(10);
+        b1 -= 3;
+
+        assert_eq!(b1, Bytes::new(7));
+    }
+
+    #[test]
     fn sub_assign_pages_to_pages() {
         let mut p1 = NumOfPages::<Size4KiB>::new(3);
         p1 -= NumOfPages::<Size4KiB>::new(1);
 
         assert_eq!(p1.as_usize(), 2);
+    }
+
+    #[test]
+    fn sub_assign_usize_to_num_of_pages() {
+        let mut p1 = NumOfPages::<Size4KiB>::new(10);
+        p1 -= 3;
+
+        assert_eq!(p1, NumOfPages::new(7));
     }
 
     #[test]
