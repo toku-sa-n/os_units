@@ -133,6 +133,11 @@ impl SubAssign for Bytes {
         self.0 -= rhs.0;
     }
 }
+impl SubAssign<usize> for Bytes {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self -= Bytes::new(rhs);
+    }
+}
 impl Mul<usize> for Bytes {
     type Output = Bytes;
     fn mul(self, rhs: usize) -> Self::Output {
@@ -233,6 +238,11 @@ impl<T: PageSize> Sub<usize> for NumOfPages<T> {
 impl<T: PageSize> SubAssign for NumOfPages<T> {
     fn sub_assign(&mut self, rhs: NumOfPages<T>) {
         self.num_of_pages -= rhs.num_of_pages;
+    }
+}
+impl<T: PageSize> SubAssign<usize> for NumOfPages<T> {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self -= Self::new(rhs);
     }
 }
 impl<T: PageSize> Mul<usize> for NumOfPages<T> {
