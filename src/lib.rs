@@ -365,24 +365,6 @@ mod tests {
     }
 
     #[test]
-    fn mul_from_bytes_to_bytes() {
-        let b1 = Bytes::new(3);
-        let b2 = Bytes::new(4);
-        let mul = b1 * b2;
-
-        assert_eq!(mul.as_usize(), 12);
-    }
-
-    #[test]
-    fn mul_from_pages_to_pages() {
-        let p1 = NumOfPages::<Size4KiB>::new(3);
-        let p2 = NumOfPages::<Size4KiB>::new(4);
-        let mul = p1 * p2;
-
-        assert_eq!(mul.as_usize(), 12);
-    }
-
-    #[test]
     fn mul_bytes_by_usize() {
         let b = Bytes::new(3);
         let mul = b * 4;
@@ -399,27 +381,11 @@ mod tests {
     }
 
     #[test]
-    fn mul_assign_bytes_by_bytes() {
-        let mut b = Bytes::new(3);
-        b *= Bytes::new(4);
-
-        assert_eq!(b.as_usize(), 12);
-    }
-
-    #[test]
     fn mul_assign_bytes_by_usize() {
         let mut b = Bytes::new(3);
         b *= 4;
 
         assert_eq!(b.as_usize(), 12);
-    }
-
-    #[test]
-    fn mul_assign_pages_by_pages() {
-        let mut p = NumOfPages::<Size4KiB>::new(3);
-        p *= NumOfPages::new(4);
-
-        assert_eq!(p.as_usize(), 12);
     }
 
     #[test]
