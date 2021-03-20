@@ -26,6 +26,7 @@
 #![no_std]
 #![feature(const_fn)]
 #![feature(const_fn_fn_ptr_basics)]
+#![deny(clippy::all, clippy::pedantic)]
 
 use {
     core::{
@@ -43,23 +44,28 @@ pub struct Bytes {
 }
 impl Bytes {
     /// Creates a new instance with given value.
+    #[must_use]
     pub const fn new(bytes: usize) -> Self {
         Self { bytes }
     }
 
     /// Equivalent to `Bytes::new(0)`.
+    #[must_use]
     pub const fn zero() -> Self {
         Self::new(0)
     }
 
     /// Returns the value.
+    #[must_use]
     pub const fn as_usize(self) -> usize {
         self.bytes
     }
 
     /// Converts bytes to the number of physical pages. Note that the number of physical pages will
     /// be calculated so that the specified bytes will be fit in pages.
+    #[must_use]
     pub const fn as_num_of_pages<T: PageSize>(self) -> NumOfPages<T> {
+        #[allow(clippy::cast_possible_truncation)]
         NumOfPages::new((self.bytes + T::SIZE as usize - 1) / T::SIZE as usize)
     }
 }
@@ -97,7 +103,6 @@ impl Mul for Bytes {
     fn mul(self, rhs: Bytes) -> Self::Output {
         Self {
             bytes: self.bytes * rhs.bytes,
-            ..self
         }
     }
 }
@@ -106,7 +111,6 @@ impl Mul<usize> for Bytes {
     fn mul(self, rhs: usize) -> Self::Output {
         Self {
             bytes: self.bytes * rhs,
-            ..self
         }
     }
 }
@@ -143,6 +147,7 @@ pub struct NumOfPages<T: PageSize> {
 }
 impl<T: PageSize> NumOfPages<T> {
     /// Creates a new instance with given value.
+    #[must_use]
     pub const fn new(num_of_pages: usize) -> Self {
         Self {
             num_of_pages,
@@ -151,17 +156,21 @@ impl<T: PageSize> NumOfPages<T> {
     }
 
     /// Equivalent to `NumOfPages::new(0)`.
+    #[must_use]
     pub const fn zero() -> Self {
         Self::new(0)
     }
 
     /// Returns the value.
+    #[must_use]
     pub const fn as_usize(self) -> usize {
         self.num_of_pages
     }
 
     /// Converts the number of physical pages to bytes.
+    #[must_use]
     pub const fn as_bytes(self) -> Bytes {
+        #[allow(clippy::cast_possible_truncation)]
         Bytes::new(self.num_of_pages * T::SIZE as usize)
     }
 }
