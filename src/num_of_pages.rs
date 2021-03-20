@@ -130,11 +130,12 @@ impl<T: PageSize> From<usize> for NumOfPages<T> {
 }
 impl<T: PageSize> fmt::Debug for NumOfPages<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_fmt(format_args!(
+        write!(
+            f,
             "NumOfPages::<{}>({})",
             T::SIZE_AS_DEBUG_STR,
             self.num_of_pages
-        ))
+        )
     }
 }
 
