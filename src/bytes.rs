@@ -253,4 +253,28 @@ mod tests {
 
         assert_eq!(f, format!("Bytes(3)"));
     }
+
+    #[test]
+    fn display_0() {
+        let b = Bytes::zero();
+        let f = format!("{}", b);
+
+        assert_eq!(f, format!("0 bytes"));
+    }
+
+    #[test]
+    fn display_1() {
+        let b = Bytes::new(1);
+        let f = format!("{}", b);
+
+        assert_eq!(f, format!("1 byte"));
+    }
+
+    #[test]
+    fn display_2() {
+        let b = Bytes::new(2);
+        let f = format!("{}", b);
+
+        assert_eq!(f, format!("2 bytes"));
+    }
 }

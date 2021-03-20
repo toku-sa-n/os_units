@@ -303,4 +303,44 @@ mod tests {
 
         assert_eq!(format!("NumOfPages::<1GiB>(3)"), f);
     }
+
+    #[test]
+    fn display_0() {
+        let n = NumOfPages::<Size4KiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (4KiB)", f));
+    }
+
+    #[test]
+    fn display_1() {
+        let n = NumOfPages::<Size4KiB>::new(1);
+        let f = format!("{}", n);
+
+        assert_eq!(format!("1 page (4KiB)", f));
+    }
+
+    #[test]
+    fn display_2() {
+        let n = NumOfPages::<Size4KiB>::new(2);
+        let f = format!("{}", n);
+
+        assert_eq!(format!("2 pages (4KiB)"), f);
+    }
+
+    #[test]
+    fn display_2m() {
+        let n = NumOfPages::<Size2MiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (2MiB)"), f);
+    }
+
+    #[test]
+    fn display_1g() {
+        let n = NumOfPages::<Size1GiB>::zero();
+        let f = format!("{}", n);
+
+        assert_eq!(format!("0 pages (1GiB)"), f);
+    }
 }
