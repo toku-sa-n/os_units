@@ -133,6 +133,11 @@ impl SubAssign for Bytes {
         self.0 -= rhs.0;
     }
 }
+impl SubAssign<usize> for Bytes {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self -= Bytes::new(rhs);
+    }
+}
 impl Mul<usize> for Bytes {
     type Output = Bytes;
     fn mul(self, rhs: usize) -> Self::Output {
@@ -233,6 +238,11 @@ impl<T: PageSize> Sub<usize> for NumOfPages<T> {
 impl<T: PageSize> SubAssign for NumOfPages<T> {
     fn sub_assign(&mut self, rhs: NumOfPages<T>) {
         self.num_of_pages -= rhs.num_of_pages;
+    }
+}
+impl<T: PageSize> SubAssign<usize> for NumOfPages<T> {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self -= Self::new(rhs);
     }
 }
 impl<T: PageSize> Mul<usize> for NumOfPages<T> {
@@ -413,11 +423,27 @@ mod tests {
     }
 
     #[test]
+    fn sub_assign_usize_to_bytes() {
+        let mut b1 = Bytes::new(10);
+        b1 -= 3;
+
+        assert_eq!(b1, Bytes::new(7));
+    }
+
+    #[test]
     fn sub_assign_pages_to_pages() {
         let mut p1 = NumOfPages::<Size4KiB>::new(3);
         p1 -= NumOfPages::<Size4KiB>::new(1);
 
         assert_eq!(p1.as_usize(), 2);
+    }
+
+    #[test]
+    fn sub_assign_usize_to_num_of_pages() {
+        let mut p1 = NumOfPages::<Size4KiB>::new(10);
+        p1 -= 3;
+
+        assert_eq!(p1, NumOfPages::new(7));
     }
 
     #[test]

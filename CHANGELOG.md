@@ -2,7 +2,7 @@
 
 ## Unreleased - ReleaseDate
 ## Added
-- `Bytes` and `NumOfPages` now implements `Add<usize>`, and `Sub<usize>`.
+- `Bytes` and `NumOfPages` now implements `Add<usize>`, `Sub<usize>`, and `SubAssign<usize>`.
 
 ### Changed
 - `#[must_use]` attribute is added to some methods.
