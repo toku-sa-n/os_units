@@ -2,6 +2,10 @@
 
 ## Unreleased - ReleaseDate
 
+## 0.3.1 - 2021-04-12
+## Changed
+- Update the version of `x86_64` crate to 0.14.0
+
 ## 0.3.0 - 2021-03-20
 ## Added
 - `Bytes` and `NumOfPages` now implements `Add<usize>`, `Sub<usize>`, `SubAssign<usize>`, `From<usize>`, `Display`, and `Hash`.
