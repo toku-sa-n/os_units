@@ -36,7 +36,7 @@ impl Bytes {
     /// Converts bytes to the number of physical pages. Note that the number of physical pages will
     /// be calculated so that the specified bytes will be fit in pages.
     #[must_use]
-    pub const fn as_num_of_pages<T: PageSize>(self) -> NumOfPages<T> {
+    pub fn as_num_of_pages<T: PageSize>(self) -> NumOfPages<T> {
         #[allow(clippy::cast_possible_truncation)]
         NumOfPages::new((self.0 + T::SIZE as usize - 1) / T::SIZE as usize)
     }
