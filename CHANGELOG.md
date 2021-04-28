@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+### Fixed
+- Build error on the latest nightly
 
 ## 0.3.1 - 2021-04-12
 ## Changed
