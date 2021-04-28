@@ -22,6 +22,7 @@
 #![cfg_attr(not(test), no_std)]
 #![feature(const_fn)]
 #![feature(const_fn_fn_ptr_basics)]
+#![feature(const_fn_trait_bound)]
 #![deny(
     warnings,
     rustdoc::all,
