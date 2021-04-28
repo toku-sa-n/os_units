@@ -20,11 +20,9 @@
 //! assert_eq!(bytes_of_pages.as_usize(), 315392);
 //! ```
 #![cfg_attr(not(test), no_std)]
-#![feature(const_fn)]
-#![feature(const_fn_fn_ptr_basics)]
 #![deny(
     warnings,
-    rustdoc::all,
+    rustdoc,
     missing_docs,
     elided_lifetimes_in_paths,
     explicit_outlives_requirements,

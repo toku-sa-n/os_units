@@ -20,7 +20,7 @@ pub struct NumOfPages<T: PageSize> {
 impl<T: PageSize> NumOfPages<T> {
     /// Creates a new instance with given value.
     #[must_use]
-    pub const fn new(num_of_pages: usize) -> Self {
+    pub fn new(num_of_pages: usize) -> Self {
         Self {
             num_of_pages,
             _marker: PhantomData,
@@ -29,19 +29,19 @@ impl<T: PageSize> NumOfPages<T> {
 
     /// Equivalent to `NumOfPages::new(0)`.
     #[must_use]
-    pub const fn zero() -> Self {
+    pub fn zero() -> Self {
         Self::new(0)
     }
 
     /// Returns the value.
     #[must_use]
-    pub const fn as_usize(self) -> usize {
+    pub fn as_usize(self) -> usize {
         self.num_of_pages
     }
 
     /// Converts the number of physical pages to bytes.
     #[must_use]
-    pub const fn as_bytes(self) -> Bytes {
+    pub fn as_bytes(self) -> Bytes {
         #[allow(clippy::cast_possible_truncation)]
         Bytes::new(self.num_of_pages * T::SIZE as usize)
     }

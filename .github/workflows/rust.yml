@@ -12,11 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: nightly
-        components: rustfmt, clippy
-        override: true
+    - name: install toolchains
+      run: rustup component add rustfmt clippy
     - name: fmt
       run: cargo fmt -- --check
     - name: Build

@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+## Changed
+- Some methods lost the `const` attribute: `Bytes::as_usize` and all methods of `NumOfPages`.
+- The stable Rust users also can use this library now.
 
 ## 0.3.1 - 2021-04-12
 ## Changed
