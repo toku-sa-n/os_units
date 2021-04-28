@@ -1,16 +1,18 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
-## Changed
+
+## 0.4.0 - 2021-04-28
+### Changed
 - Some methods lost the `const` attribute: `Bytes::as_usize` and all methods of `NumOfPages`.
 - The stable Rust users also can use this library now.
 
 ## 0.3.1 - 2021-04-12
-## Changed
+### Changed
 - Update the version of `x86_64` crate to 0.14.0
 
 ## 0.3.0 - 2021-03-20
-## Added
+### Added
 - `Bytes` and `NumOfPages` now implements `Add<usize>`, `Sub<usize>`, `SubAssign<usize>`, `From<usize>`, `Display`, and `Hash`.
 - The debug print of the `NumOfPages` type is improved.
 
