@@ -3,9 +3,6 @@
 //! the size of physical memory pages into bytes, and bytes into the number of physical memory
 //! pages.
 //!
-//! Currently, this crate only supports Rust nightly version because of using
-//! [`const_fn`](https://doc.rust-lang.org/beta/unstable-book/language-features/const-fn.html) feature.
-//!
 //! # Examples
 //!
 //! ```rust
