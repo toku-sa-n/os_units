@@ -9,7 +9,5 @@ repository = "https://github.com/toku-sa-n/os_units"
 categories = ["no-std", "os"]
 keywords = ["no_std", "os"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 x86_64 = { version = "0.14.0", default-features = false }
