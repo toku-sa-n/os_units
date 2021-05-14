@@ -18,7 +18,7 @@
 //! ```
 #![cfg_attr(not(test), no_std)]
 #![deny(
-    rustdoc,
+    rustdoc::all,
     missing_docs,
     elided_lifetimes_in_paths,
     explicit_outlives_requirements,
