@@ -18,7 +18,6 @@
 //! ```
 #![cfg_attr(not(test), no_std)]
 #![deny(
-    warnings,
     rustdoc,
     missing_docs,
     elided_lifetimes_in_paths,
