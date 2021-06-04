@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+
+## 0.4.1 - 2021-06-04
 ### Changed
 - Update the version of `x86_64` crate to 0.14.3.
 
