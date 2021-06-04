@@ -10,4 +10,4 @@ categories = ["no-std", "os"]
 keywords = ["no_std", "os"]
 
 [dependencies]
-x86_64 = { version = "0.14.0", default-features = false }
+x86_64 = { version = "0.14.3", default-features = false }
