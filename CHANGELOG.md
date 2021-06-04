@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+### Changed
+- Update the version of `x86_64` crate to 0.14.3.
+
 ### Removed
 - `#![deny(warnings)]` is removed from the source code.
 
