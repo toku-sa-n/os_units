@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased - ReleaseDate
+
+## 0.4.2 - 2021-06-14
 ### Added
 - `PhysAddr` and `VirtAddr` of the `x86_64` crate now implement `Add`, `AddAssign`, `Sub`, and `SubAssign` with `Bytes`.
 
