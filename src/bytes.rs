@@ -9,6 +9,8 @@ use core::ops::MulAssign;
 use core::ops::Sub;
 use core::ops::SubAssign;
 use x86_64::structures::paging::PageSize;
+use x86_64::PhysAddr;
+use x86_64::VirtAddr;
 
 #[repr(transparent)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -55,6 +57,20 @@ impl Add<usize> for Bytes {
         Self::new(self.0 + rhs)
     }
 }
+impl Add<Bytes> for VirtAddr {
+    type Output = VirtAddr;
+
+    fn add(self, rhs: Bytes) -> Self::Output {
+        self + rhs.as_usize()
+    }
+}
+impl Add<Bytes> for PhysAddr {
+    type Output = PhysAddr;
+
+    fn add(self, rhs: Bytes) -> Self::Output {
+        self + rhs.as_usize()
+    }
+}
 impl AddAssign for Bytes {
     fn add_assign(&mut self, rhs: Bytes) {
         self.0 += rhs.0;
@@ -63,6 +79,16 @@ impl AddAssign for Bytes {
 impl AddAssign<usize> for Bytes {
     fn add_assign(&mut self, rhs: usize) {
         self.0 += rhs;
+    }
+}
+impl AddAssign<Bytes> for VirtAddr {
+    fn add_assign(&mut self, rhs: Bytes) {
+        *self += rhs.as_usize();
+    }
+}
+impl AddAssign<Bytes> for PhysAddr {
+    fn add_assign(&mut self, rhs: Bytes) {
+        *self += rhs.as_usize();
     }
 }
 impl Sub for Bytes {
@@ -79,6 +105,20 @@ impl Sub<usize> for Bytes {
         Self::new(self.0 - rhs)
     }
 }
+impl Sub<Bytes> for VirtAddr {
+    type Output = VirtAddr;
+
+    fn sub(self, rhs: Bytes) -> Self::Output {
+        self - rhs.as_usize()
+    }
+}
+impl Sub<Bytes> for PhysAddr {
+    type Output = PhysAddr;
+
+    fn sub(self, rhs: Bytes) -> Self::Output {
+        self - rhs.as_usize()
+    }
+}
 impl SubAssign for Bytes {
     fn sub_assign(&mut self, rhs: Bytes) {
         self.0 -= rhs.0;
@@ -87,6 +127,16 @@ impl SubAssign for Bytes {
 impl SubAssign<usize> for Bytes {
     fn sub_assign(&mut self, rhs: usize) {
         *self -= Bytes::new(rhs);
+    }
+}
+impl SubAssign<Bytes> for VirtAddr {
+    fn sub_assign(&mut self, rhs: Bytes) {
+        *self -= rhs.as_usize();
+    }
+}
+impl SubAssign<Bytes> for PhysAddr {
+    fn sub_assign(&mut self, rhs: Bytes) {
+        *self -= rhs.as_usize()
     }
 }
 impl Mul<usize> for Bytes {
@@ -128,6 +178,7 @@ impl fmt::Display for Bytes {
 mod tests {
     use super::*;
     use x86_64::structures::paging::{Size1GiB, Size2MiB, Size4KiB};
+    use x86_64::{PhysAddr, VirtAddr};
 
     #[test]
     fn get_value_from_bytes() {
@@ -283,5 +334,69 @@ mod tests {
         let f = format!("{}", b);
 
         assert_eq!(f, format!("2 bytes"));
+    }
+
+    #[test]
+    fn add_bytes_to_virt_addr() {
+        let a = VirtAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a + bytes, VirtAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_bytes_to_phys_addr() {
+        let a = PhysAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a + bytes, PhysAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_assign_bytes_to_virt_addr() {
+        let mut a = VirtAddr::new(0x1000);
+        a += Bytes::new(4);
+
+        assert_eq!(a, VirtAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_assign_bytes_to_phys_addr() {
+        let mut a = PhysAddr::new(0x1000);
+        a += Bytes::new(4);
+
+        assert_eq!(a, PhysAddr::new(0x1004));
+    }
+
+    #[test]
+    fn sub_bytes_from_virt_addr() {
+        let a = VirtAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a - bytes, VirtAddr::new(0xffc));
+    }
+
+    #[test]
+    fn sub_bytes_from_phys_addr() {
+        let a = PhysAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a - bytes, PhysAddr::new(0xffc));
+    }
+
+    #[test]
+    fn sub_assign_bytes_from_virt_addr() {
+        let mut a = VirtAddr::new(0x1000);
+        a -= Bytes::new(4);
+
+        assert_eq!(a, VirtAddr::new(0xffc));
+    }
+
+    #[test]
+    fn sub_assign_bytes_from_phys_addr() {
+        let mut a = PhysAddr::new(0x1000);
+        a -= Bytes::new(4);
+
+        assert_eq!(a, PhysAddr::new(0xffc));
     }
 }
