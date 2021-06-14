@@ -128,6 +128,7 @@ impl fmt::Display for Bytes {
 mod tests {
     use super::*;
     use x86_64::structures::paging::{Size1GiB, Size2MiB, Size4KiB};
+    use x86_64::{PhysAddr, VirtAddr};
 
     #[test]
     fn get_value_from_bytes() {
@@ -283,5 +284,69 @@ mod tests {
         let f = format!("{}", b);
 
         assert_eq!(f, format!("2 bytes"));
+    }
+
+    #[test]
+    fn add_bytes_to_virt_addr() {
+        let a = VirtAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a + bytes, VirtAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_bytes_to_phys_addr() {
+        let a = PhysAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a + bytes, PhysAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_assign_bytes_to_virt_addr() {
+        let mut a = VirtAddr::new(0x1000);
+        a += Bytes::new(4);
+
+        assert_eq!(a, VirtAddr::new(0x1004));
+    }
+
+    #[test]
+    fn add_assign_bytes_to_phys_addr() {
+        let mut a = PhysAddr::new(0x1000);
+        a += Bytes::new(4);
+
+        assert_eq!(a, PhysAddr::new(0x1004));
+    }
+
+    #[test]
+    fn sub_bytes_from_virt_addr() {
+        let a = VirtAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a - bytes, VirtAddr::new(0x996));
+    }
+
+    #[test]
+    fn sub_bytes_from_phys_addr() {
+        let a = PhysAddr::new(0x1000);
+        let bytes = Bytes::new(4);
+
+        assert_eq!(a - bytes, PhysAddr::new(0x996));
+    }
+
+    #[test]
+    fn sub_assign_bytes_from_virt_addr() {
+        let mut a = VirtAddr::new(0x1000);
+        a -= Bytes::new(4);
+
+        assert_eq!(a, VirtAddr::new(0x996));
+    }
+
+    #[test]
+    fn sub_assign_bytes_from_phys_addr() {
+        let mut a = PhysAddr::new(0x1000);
+        a -= Bytes::new(4);
+
+        assert_eq!(a, PhysAddr::new(0x996));
     }
 }
